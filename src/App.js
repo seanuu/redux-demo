@@ -1,26 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {counterActionCreator, decrementAsync} from './store/counter'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = (props) => (
+    <React.Fragment>
+        <div>{props.counter.count}</div>
+        <button onClick={() => props.increment(1)}>increment</button>
+        <button onClick={() => props.decrement(1)}>decrement</button>
+        <button onClick={() => props.incrementAsync(1)}>incrementAsync</button>
+        <button onClick={() => props.decrementAsync(1)}>decrementAsync</button>
+    </React.Fragment>
+);
 
-export default App;
+const mapStateToProps = (state) => ({
+    counter: state.counter,
+});
+
+const mapDispatchToProps = (dispatch) => (
+    bindActionCreators({...counterActionCreator, decrementAsync}, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
